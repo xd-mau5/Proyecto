@@ -39,7 +39,7 @@ def serie_tiempo(data, min, max, x, y, title):
         font=dict(
             family="Cascadia Code, monospace",
             size=18,
-            color="RebeccaPurple"
+            color="black"
         )
     )
     fig.update_xaxes(
@@ -110,10 +110,11 @@ def run_UI():
         st.subheader('Cantidad de accidentes por departamento')
         st.container()
         # Hacer una grafica por DESCRIPCION CONDUCTA = 'LESIONES CULPOSAS ( EN ACCIDENTE DE TRANSITO )' en total
+        # Con un solo color difuminado
         df_lesiones = df.copy()
         df_lesiones[df_lesiones["DESCRIPCIÓN CONDUCTA"] == "LESIONES CULPOSAS ( EN ACCIDENTE DE TRANSITO )"][["ARMAS MEDIOS"]].value_counts()
         df_lesiones = df_lesiones.groupby('DEPARTAMENTO').agg({'CANTIDAD': 'sum'}).reset_index()
-        fig = px.bar(df_lesiones, x='DEPARTAMENTO', y='CANTIDAD', color='DEPARTAMENTO', color_discrete_sequence=px.colors.qualitative.Dark24)
+        fig = px.bar(df_lesiones, x='DEPARTAMENTO', y='CANTIDAD', color_discrete_sequence=['#f4d03f'])
         fig.update_layout(
             title='Cantidad de accidentes de transito por departamento',
             xaxis_title='Departamento',
@@ -121,7 +122,7 @@ def run_UI():
             font=dict(
             family="Cascadia Code, monospace",
             size=12
-        )
+            )
         )
         fig.update_traces(
             hovertemplate="<b>Departamento</b>: %{x} <br><b>Cantidad</b>: %{y}"
