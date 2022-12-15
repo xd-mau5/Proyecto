@@ -72,7 +72,7 @@ pages = ['Inicio', 'Tablas', 'Gráficas', 'Predicción']
 #st.title('Dashboard')
 @st.cache(allow_output_mutation=True)
 def cargar_datos():
-    df = pd.read_csv('Reporte_Lesiones_Personales_y_en_Accidente_de_Tr_nsito_Polic_a_Nacional.csv', low_memory=False)
+    df = pd.read_csv('https://files.xd-mau5.xyz/Diplomado%20Python/Proyecto/Reporte_Lesiones_Personales_y_en_Accidente_de_Tr_nsito_Polic_a_Nacional.csv', low_memory=False)
     df = df.dropna()
     df = df.drop('CODIGO DANE', axis=1)
     df['FECHA HECHO'] = pd.to_datetime(df['FECHA HECHO'], format='%d/%m/%Y')
