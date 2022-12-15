@@ -66,7 +66,7 @@ def request_api(DIA, MES, ETAREO, GENERO, FESTIVO):
     prediction = requests.post(url_api, data=data_cleaned).text
     df_prediction = pd.read_json(prediction)
     return df_prediction
-pages = ['Inicio', 'Tablas', 'Gráficas', 'Predicción']
+pages = ['Inicio', 'Tablas', 'Gráficas']
 #st.title('Dashboard')
 @st.cache(allow_output_mutation=True)
 def cargar_datos():
