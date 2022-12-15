@@ -1,0 +1,9 @@
+numpy
+pandas
+matplotlib
+seaborn
+datetime
+locale
+holidays_co
+joblib
+statsmodels

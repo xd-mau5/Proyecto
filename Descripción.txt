@@ -1,0 +1,2 @@
+Reporte Lesiones Personales y en Accidente de Tránsito Policía
+En este conjunto de datos la ciudadanía puede encontrará información del delito de Lesiones personales y Lesiones en accidente de Tránsito desde 01 de enero del año 2010 al 31 de Agosto del año 2022.
