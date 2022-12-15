@@ -4,6 +4,7 @@ from holidays_co import is_holiday_date
 import plotly.express as px
 import plotly.graph_objects as go
 import requests
+import json
 st.set_page_config(
     page_title="Presentacion",
     page_icon="📚",
@@ -59,14 +60,8 @@ def serie_tiempo(data, min, max, x, y, title):
         hovertemplate="<b>Fecha</b>: %{x} <br><b>Cantidad</b>: %{y}"
     )
     return fig
-def request_api(DIA, MES, ETAREO, GENERO, FESTIVO):
-    request_data = [{"DIA": DIA, "MES": MES, "ETAREO": ETAREO, "GENERO": GENERO, "FESTIVO": FESTIVO}]
-    data_cleaned = str(request_data).replace("'", '"')
-    url_api = ''
-    prediction = requests.post(url_api, data=data_cleaned).text
-    df_prediction = pd.read_json(prediction)
-    return df_prediction
-pages = ['Inicio', 'Tablas', 'Gráficas']
+
+pages = ['Inicio', 'Tablas', 'Gráficas', 'Predicción']
 #st.title('Dashboard')
 @st.cache(allow_output_mutation=True)
 def cargar_datos():
@@ -81,6 +76,19 @@ def cargar_datos():
     df = pd.DataFrame(df)
     return df
 df = cargar_datos()
+def request_api(fecha):
+    request_data = {'fecha': str(fecha)}
+    #df = str(request_data).replace("'", '"')
+    request_data = json.dumps(request_data)
+    url_api = 'http://3.226.93.87/predict'
+    headers = {'Content-type': 'application/json'}
+    # make a request like this fecha: "2023-01-01"
+    response = requests.post(url_api, data=request_data, headers=headers, json=True)
+    response = response.json()
+    response = pd.DataFrame(response)
+    return response["prediction"][0]
+
+
 def run_UI():
     page = st.sidebar.selectbox('Selecciona una página', pages)
     if page == 'Inicio':
@@ -98,6 +106,20 @@ def run_UI():
         ''')
     if page == 'Tablas':
         """# Tablas"""
+        st.subheader('Cantidad de accidentes por fecha')
+        st.sidebar.subheader('Filtros para la tabla 1')
+        st.container()
+        min_date = st.sidebar.date_input('Fecha mínima', value=df['FECHA HECHO'].min(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+        max_date = st.sidebar.date_input('Fecha máxima', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+        st.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date)) & (df['FECHA HECHO'] <= pd.to_datetime(max_date))].groupby(by='FECHA HECHO')['FECHA HECHO'].count().reset_index(name='Cantidad'))
+        st.subheader('Cantidad de accidentes por fecha y departamento')
+        st.sidebar.subheader('Filtros para la tabla 2')
+        st.container()
+        min_date2 = st.sidebar.date_input('Fecha mínima', value=df['FECHA HECHO'].min(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=100)
+        max_date2 = st.sidebar.date_input('Fecha máxima', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=101)
+        departamento = st.sidebar.selectbox('Departamento', df['DEPARTAMENTO'].unique())
+        st.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date2)) & (df['FECHA HECHO'] <= pd.to_datetime(max_date2)) & (df['DEPARTAMENTO'] == departamento)].groupby(by='FECHA HECHO')['FECHA HECHO'].count().reset_index(name='Cantidad'))
+        st.container()
     if page == 'Gráficas':
         st.subheader('Cantidad de accidentes por fecha')
         st.sidebar.subheader('Filtros para la gráfica 1')
@@ -134,13 +156,9 @@ def run_UI():
         st.header('Predicción')
         st.subheader('Realiza una predicción')
         st.write('Selecciona los parámetros para realizar la predicción')
-        dia = st.sidebar.number_input('Día', min_value=1, max_value=31, value=1)
-        mes = st.sidebar.number_input('Mes', min_value=1, max_value=12, value=1)
-        festivo = st.sidebar.selectbox('Festivo', ['SI', 'NO'])
-
-
+        fecha = st.date_input('Fecha', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
         if st.button('Realizar predicción'):
-            df_prediction = request_api(dia, mes, festivo)
-            st.write(df_prediction)
+            prediction = request_api(fecha)
+            st.write('La predicción es de: ', prediction, 'accidentes en', fecha)
 if __name__ == '__main__':
     run_UI()
