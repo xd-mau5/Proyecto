@@ -156,7 +156,7 @@ def run_UI():
         st.header('Predicción')
         st.subheader('Realiza una predicción')
         st.write('Selecciona los parámetros para realizar la predicción')
-        fecha = st.date_input('Fecha', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+        fecha = st.date_input('Fecha', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min())
         if st.button('Realizar predicción'):
             prediction = request_api(fecha)
             st.write('La predicción es de: ', prediction, 'accidentes en', fecha)
