@@ -80,7 +80,7 @@ def request_api(fecha):
     request_data = {'fecha': str(fecha)}
     #df = str(request_data).replace("'", '"')
     request_data = json.dumps(request_data)
-    url_api = 'http://3.226.93.87/predict'
+    url_api = 'http://api.xd-mau5.xyz/predict'
     headers = {'Content-type': 'application/json'}
     # make a request like this fecha: "2023-01-01"
     response = requests.post(url_api, data=request_data, headers=headers, json=True)
