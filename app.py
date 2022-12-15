@@ -1,7 +1,5 @@
-from matplotlib.backend_tools import ToolSetCursor
 import streamlit as st
 import pandas as pd
-import numpy as np
 from holidays_co import is_holiday_date
 import plotly.express as px
 import plotly.graph_objects as go
