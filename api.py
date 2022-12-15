@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from typing import List
-
+import uvicorn
 import pandas as pd
 from classes import OutputModel, InputModel, APIResponse
 
