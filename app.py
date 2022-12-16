@@ -93,7 +93,7 @@ def run_UI():
     page = st.sidebar.selectbox('Selecciona una página', pages)
     if page == 'Inicio':
         st.markdown('''
-        # Bienvenido al dashboard del analisis de lesiones personales y accidentes de transito en Colombia
+        # Bienvenido al dashboard del análisis de lesiones personales y accidentes de tránsito en Colombia
         Este dashboard fue realizado por estudiantes de la Universidad de Córdoba, en el marco del diplomado de Python para el análisis de datos.
         
         ## Integrantes:
@@ -150,7 +150,7 @@ def run_UI():
             fig = serie_tiempo(df, pd.to_datetime(min_date_graph), pd.to_datetime(max_date_graph),  'FECHA HECHO', 'CANTIDAD', 'Cantidad de accidentes por fecha')
             tab1.plotly_chart(fig, use_container_width=True)
         with tab2.container():
-            tab2.subheader('Cantidad de accidentes de transito por departamento')
+            tab2.subheader('Cantidad de accidentes de tránsito por departamento')
             tab2.container()
             df_lesiones = df.copy()
             df_lesiones[df_lesiones["DESCRIPCIÓN CONDUCTA"] == "LESIONES CULPOSAS ( EN ACCIDENTE DE     TRANSITO )"][["ARMAS MEDIOS"]].value_counts()
@@ -158,7 +158,7 @@ def run_UI():
             # sort by quantity of upper to lower
             fig2 = px.bar(df_lesiones.sort_values(by='CANTIDAD',ascending=False), x='DEPARTAMENTO', y='CANTIDAD', color_discrete_sequence= ['#f4d03f'])
             fig2.update_layout(
-                title='Cantidad de accidentes de transito por departamento',
+                title='Cantidad de accidentes de tránsito por departamento',
                 xaxis_title='Departamento',
                 yaxis_title='Cantidad de accidentes',
                 font=dict(
