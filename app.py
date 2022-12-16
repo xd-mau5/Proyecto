@@ -90,8 +90,10 @@ def request_api(fecha):
 
 
 def run_UI():
+    st.sidebar.image('https://www.unicordoba.edu.co/wp-content/uploads/2018/11/unicordoba_logo1.png')
     page = st.sidebar.selectbox('Selecciona una página', pages)
     if page == 'Inicio':
+        st.balloons()
         st.markdown('''
         # Bienvenido al dashboard del análisis de lesiones personales y accidentes de tránsito en Colombia
         Este dashboard fue realizado por estudiantes de la Universidad de Córdoba, en el marco del diplomado de Python para el análisis de datos.
@@ -193,11 +195,10 @@ def run_UI():
             )
             tab3.plotly_chart(fig3, use_container_width=True)
 
-
     if page == 'Predicción':
         st.header('Predicción')
         st.subheader('Realiza una predicción')
-        st.write('Selecciona los parámetros para realizar la predicción')
+        st.markdown('En este apartado puedes realizar una predicción de la cantidad de lesionados en un día específico')
         fecha = st.date_input('Fecha', value=df['FECHA HECHO'].max(), min_value=df['FECHA HECHO'].min())
         if st.button('Realizar predicción'):
             prediction = request_api(fecha)
