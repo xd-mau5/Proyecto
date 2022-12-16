@@ -106,48 +106,52 @@ def run_UI():
         ''')
     if page == 'Tablas':
         """# Tablas"""
-        with st.container():
-            st.subheader('Cantidad de accidentes por fecha')
-            st.sidebar.subheader('Filtros para la tabla 1')
-            st.write("Seleccione el rango de fechas para ver la cantidad de accidentes por fecha")
-            st.write('Nota: Los datos de la tabla se actualizan cada vez que se cambia el rango de fechas')
-            min_date = st.sidebar.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),     min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
-            max_date = st.sidebar.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),     min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
-            st.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date)) & (df['FECHA HECHO'] <= pd. to_datetime(max_date))].groupby(by='FECHA HECHO')['FECHA HECHO'].count().reset_index (name='Cantidad'))
-        with st.container():
-            st.subheader('Cantidad de accidentes por fecha y departamento')
-            st.sidebar.subheader('Filtros para la tabla 2')
-            st.markdown(
+        tabs1, tabs2, tabs3 = st.tabs([f"🗃Tabla {i}" for i in range(1, 4)])
+        with tabs1.container():
+            tabs1.subheader('Cantidad de accidentes por fecha')
+            tabs1.subheader('Filtros para la tabla')
+            tabs1.write("Seleccione el rango de fechas para ver la cantidad de accidentes por fecha")
+            tabs1.write('Nota: Los datos de la tabla se actualizan cada vez que se cambia el rango de fechas')
+            min_date = tabs1.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),     min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+            max_date = tabs1.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),     min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+            tabs1.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date)) & (df['FECHA HECHO'] <= pd. to_datetime(max_date))].groupby(by='FECHA HECHO')['FECHA HECHO'].count().reset_index (name='Cantidad'))
+        with tabs2.container():
+            tabs2.subheader('Cantidad de accidentes por fecha y departamento')
+            tabs2.subheader('Filtros para la tabla')
+            tabs2.markdown(
                 'Seleccione el rango de fechas y el departamento para ver la cantidad de accidentes por fecha y departamento'+'<br>' + '**Nota:** Los datos de la tabla se actualizan cada vez que se cambia el rango de fechas o el departamento', unsafe_allow_html=True
                 )
-            min_date2 = st.sidebar.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=100)
-            max_date2 = st.sidebar.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=101)
-            departamento = st.sidebar.selectbox('Departamento', df['DEPARTAMENTO'].unique())
-            st.markdown('**Departamento de: {}**'.format(departamento))
-            st.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date2)) & (df['FECHA HECHO'] <= pd.    to_datetime(max_date2)) & (df['DEPARTAMENTO'] == departamento)].groupby(by='FECHA HECHO')   ['FECHA HECHO'].count().reset_index(name='Cantidad'))
-        with st.container():
-            st.subheader('Cantidad de accidentes por departamento y municipio')
-            st.sidebar.subheader('Filtros para la tabla 3')
-            st.markdown(
-                'Seleccione el departamento y el municipio para ver la cantidad de accidentes por departamento y municipio'+'<br>' + '**Nota:** Los datos de la tabla se actualizan cada vez que se cambia el departamento o el municipio', unsafe_allow_html=True
+            min_date2 = tabs2.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=100)
+            max_date2 = tabs2.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=101)
+            departamento = tabs2.selectbox('Departamento', df['DEPARTAMENTO'].unique())
+            tabs2.markdown('**Departamento de: {}**'.format(departamento))
+            tabs2.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date2)) & (df['FECHA HECHO'] <= pd.    to_datetime(max_date2)) & (df['DEPARTAMENTO'] == departamento)].groupby(by='FECHA HECHO')   ['FECHA HECHO'].count().reset_index(name='Cantidad'))
+        with tabs3.container():
+            tabs3.subheader('Cantidad de accidentes por fecha, departamento y municipio')
+            tabs3.subheader('Filtros para la tabla')
+            tabs3.markdown(
+                'Seleccione el rango de fechas, el departamento y el municipio para ver la cantidad de accidentes por fecha, departamento y municipio'+'<br>' + '**Nota:** Los datos de la tabla se actualizan cada vez que se cambia el rango de fechas, el departamento o el municipio', unsafe_allow_html=True
                 )
-            departamento2 = st.sidebar.selectbox('Departamento', df['DEPARTAMENTO'].unique(), key=200)
-            municipio = st.sidebar.selectbox('Municipio', df[df['DEPARTAMENTO'] == departamento2]['MUNICIPIO'].unique(), key=201)
-            st.markdown('**Departamento de: {}**'.format(departamento2))
-            st.markdown('**Municipio de: {}**'.format(municipio))
-            st.table(df[(df['DEPARTAMENTO'] == departamento2) & (df['MUNICIPIO'] == municipio)].groupby(by='MUNICIPIO')['MUNICIPIO'].count().reset_index(name='Cantidad'))
-            
+            min_date3 = tabs3.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=200)
+            max_date3 = tabs3.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),    min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max(), key=201)
+            departamento3 = tabs3.selectbox('Departamento', df['DEPARTAMENTO'].unique(), key=300)
+            municipio3 = tabs3.selectbox('Municipio', df[df['DEPARTAMENTO'] == departamento3]['MUNICIPIO'].unique(), key=400)
+            tabs3.markdown('**Departamento de: {}**'.format(departamento3))
+            tabs3.markdown('**Municipio de: {}**'.format(municipio3))
+            tabs3.table(df[(df['FECHA HECHO'] >= pd.to_datetime(min_date3)) & (df['FECHA HECHO'] <= pd.    to_datetime(max_date3)) & (df['DEPARTAMENTO'] == departamento3) & (df['MUNICIPIO'] == municipio3)].groupby(by='FECHA HECHO')['FECHA HECHO'].count().reset_index(name='Cantidad'))
+
     if page == 'Gráficas':
-        st.subheader('Cantidad de accidentes por fecha')
-        st.sidebar.subheader('Filtros para la gráfica 1')
-        with st.container():
-            min_date_graph = st.sidebar.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),   min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
-            max_date_graph = st.sidebar.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),   min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+        tab1, tab2, tab3 = st.tabs(['📈Gráfica 1', '📈Gráfica 2', '📈Gráfica 3'])
+        tab1.header('Cantidad de accidentes por fecha')
+        tab1.subheader('Filtros para la gráfica 1')
+        with tab1.container():
+            min_date_graph = tab1.date_input('Fecha mínima', value=df['FECHA HECHO'].min(),   min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
+            max_date_graph = tab1.date_input('Fecha máxima', value=df['FECHA HECHO'].max(),   min_value=df['FECHA HECHO'].min(), max_value=df['FECHA HECHO'].max())
             fig = serie_tiempo(df, pd.to_datetime(min_date_graph), pd.to_datetime(max_date_graph),  'FECHA HECHO', 'CANTIDAD', 'Cantidad de accidentes por fecha')
-            st.plotly_chart(fig, use_container_width=True)
-        with st.container():
-            st.subheader('Cantidad de accidentes de transito por departamento')
-            st.container()
+            tab1.plotly_chart(fig, use_container_width=True)
+        with tab2.container():
+            tab2.subheader('Cantidad de accidentes de transito por departamento')
+            tab2.container()
             df_lesiones = df.copy()
             df_lesiones[df_lesiones["DESCRIPCIÓN CONDUCTA"] == "LESIONES CULPOSAS ( EN ACCIDENTE DE     TRANSITO )"][["ARMAS MEDIOS"]].value_counts()
             df_lesiones = df_lesiones.groupby('DEPARTAMENTO').agg({'CANTIDAD': 'sum'}).reset_index()
@@ -165,13 +169,31 @@ def run_UI():
             fig2.update_traces(
                 hovertemplate="<b>Departamento</b>: %{x} <br><b>Cantidad</b>: %{y}"
             )
-            st.plotly_chart(fig2, use_container_width=True)
-        with st.container():
-            st.subheader('Cantidad de lesionados por tipo de arma o medio')
-            st.sidebar.subheader('Filtros para la gráfica 3')
+            tab2.plotly_chart(fig2, use_container_width=True)
+        with tab3.container():
+            tab3.subheader('Cantidad de lesionados por tipo de arma o medio')
+            tab3.subheader('Filtros para la gráfica 3')
             df_lesiones = df.copy()
-            st.sidebar.multiselect('Tipo de arma o medio', df_lesiones['ARMAS MEDIOS'].unique())
-            
+            df_lesiones = df_lesiones.groupby('DESCRIPCIÓN CONDUCTA').agg({'CANTIDAD': 'sum'}).reset_index()
+            conducta = tab3.selectbox('Tipo de arma o medio', df_lesiones['DESCRIPCIÓN CONDUCTA'].unique())
+            df_lesiones = df[df['DESCRIPCIÓN CONDUCTA'] == conducta]
+            df_lesiones = df_lesiones.groupby('ARMAS MEDIOS').agg({'CANTIDAD': 'sum'}).reset_index()
+            fig3 = px.bar(df_lesiones.sort_values(by='CANTIDAD',ascending=False), x='ARMAS MEDIOS', y='CANTIDAD', color_discrete_sequence= ['#f4d03f'])
+            fig3.update_layout(
+                title='Cantidad de lesionados por tipo de arma o medio',
+                xaxis_title='Tipo de arma o medio',
+                yaxis_title='Cantidad de lesionados',
+                font=dict(
+                family="Cascadia Code, monospace",
+                size=12
+                )
+            )
+            fig3.update_traces(
+                hovertemplate="<b>Tipo de arma o medio</b>: %{x} <br><b>Cantidad</b>: %{y}"
+            )
+            tab3.plotly_chart(fig3, use_container_width=True)
+
+
     if page == 'Predicción':
         st.header('Predicción')
         st.subheader('Realiza una predicción')
